@@ -1,20 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
-
 import { connect, sendTextMessage, isTyping, disconnect } from 'src/services/chat';
+import { Message } from 'src/services/chat/types';
 
 import './styles.css';
+import { TextMessage } from './textMessage';
 
-export function Chat({ location: { search }, history }: RouteChildrenProps) {
+export const Chat: React.FC<RouteChildrenProps> = ({ location: { search }, history }) => {
   const username = new URLSearchParams(search).get('username');
   const [msg, setMsg] = useState('');
+  const dummyBottomDiv = useRef<HTMLDivElement | null>(null);
+
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [typers, setTypers] = useState<string[]>([]);
 
   useEffect(() => {
     if (!username) {
       history.replace('/');
     } else {
-      connect(username);
-      return () => disconnect();
+      connect(
+        username,
+        (newMsg: Message) => {
+          setMessages((currentMessages) => [...currentMessages, newMsg]);
+          if (newMsg.username !== username) {
+            dummyBottomDiv.current?.scrollIntoView({ behavior: 'smooth' });
+          }
+        },
+        setTypers,
+      );
+      return disconnect;
     }
   }, [history, username]);
 
@@ -22,8 +36,10 @@ export function Chat({ location: { search }, history }: RouteChildrenProps) {
     <div className="OuterContainer">
       <div className="ChatContainer">
         <div className="ChatMessagesContainer">
-          Jim Halperudsdsduu
-          {/*messages.map*/}
+          {messages.map((msg, idx) =>
+            msg.type === 'text' ? <TextMessage {...msg} key={`${msg.username}-${msg.time}-${idx}`} /> : null,
+          )}
+          <div ref={dummyBottomDiv} />
         </div>
         <form
           onSubmit={(event) => {
@@ -46,8 +62,9 @@ export function Chat({ location: { search }, history }: RouteChildrenProps) {
             />
             <input type="submit" className="ChatMsgSend" value="Send" disabled={!msg} />
           </div>
+          {!!typers.length && (typers.length === 1 ? `${typers[0]} is typing...` : 'People are typing...')}
         </form>
       </div>
     </div>
   );
-}
+};

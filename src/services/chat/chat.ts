@@ -1,34 +1,34 @@
 import socketIOClient from 'socket.io-client';
-import { Message } from './types';
+
+import { Message, Typers } from './types';
 
 let socket: SocketIOClient.Socket | undefined;
 
-export function connect(username: string) {
+export function connect(
+  username: string,
+  onMessageEvent: (message: Message) => void,
+  onTypingEvent: (usersTyping: string[]) => void,
+) {
   socket?.disconnect();
   socket = socketIOClient(`https://pager-hiring.herokuapp.com/?username=${username}`);
-  socket.on('user-connected', (username: string) => {
-    console.log(username, 'CONNECTED');
-  });
-  socket.on('user-disconnected', (username: string) => {
-    console.log(username, 'DISCONNECTED');
-  });
-  socket.on('is-typing', (typers: any) => {
-    // <typers> is a map where the `key` is the <username> and the value is a `boolean` that is `true` if the user is typing and `false` if not.
-    // typers: {
-    //   [username: string]: boolean
-    //   }
-    console.log('~~~ typers', typers);
-  });
-  socket.on('message', (message: Message) => {
-    if (message.type === 'text') {
-      console.log('MESSAGE from', message.username, 'at', message.time, ': ', message.text);
-    } else {
-      console.log('MESSAGE from', message.username, 'at', message.time, ': ', message.url, message.alt);
-    }
+  // socket.on('user-connected', (username: string) => {
+  //   console.log(username, 'CONNECTED');
+  // socket.on('user-disconnected', (username: string) => {
+  //   console.log(username, 'DISCONNECTED');
+
+  socket.on('message', onMessageEvent);
+
+  socket.on('is-typing', (typers: Typers) => {
+    onTypingEvent(
+      Object.entries(typers)
+        .filter(([otherUser, isTyping]) => isTyping && otherUser !== username)
+        .map(([otherUser]) => otherUser),
+    );
   });
 }
 
 export function disconnect() {
+  socket?.removeAllListeners();
   socket?.disconnect();
   socket = undefined;
 }

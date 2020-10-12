@@ -1,0 +1,38 @@
+.TextMessageOuterContainer {
+  display: flex;
+  margin-bottom: 24px;
+}
+
+.Avatar {
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  margin-right: 16px;
+}
+
+.TextMessageContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.UserTimeContainer {
+  display: flex;
+  margin-bottom: 4px;
+  align-items: center;
+}
+
+.Username {
+  font-weight: bold;
+  margin-right: 12px;
+}
+
+.DateTime {
+  font-size: 12px;
+  color: #969696;
+  white-space: nowrap;
+}
+
+.MsgBody {
+  /*line-height: 1.4;*/
+}
+
