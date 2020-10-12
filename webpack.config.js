@@ -5,19 +5,19 @@ module.exports = {
   output: {
     path: __dirname + '/public',
     filename: 'build/app.js',
-    publicPath: '/'
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
-    alias: { "src": path.resolve(__dirname, "src") },
+    alias: { src: path.resolve(__dirname, 'src') },
   },
   module: {
     rules: [
-      { test: /\.tsx?$/, loader: 'ts-loader' } ,
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] }
-    ]
-  } ,
+      { test: /\.tsx?$/, loader: 'ts-loader' },
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+    ],
+  },
   devServer: {
     historyApiFallback: true,
-  }
-}
+  },
+};

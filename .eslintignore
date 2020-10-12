@@ -1,0 +1,9 @@
+out-tsc
+node_modules
+public
+
+.prettierrc.js
+.eslintrc.js
+*.config.js
+
+.idea
