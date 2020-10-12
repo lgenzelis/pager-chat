@@ -1,15 +1,23 @@
+const path = require('path');
+
 module.exports = {
-  entry: './src/app.tsx',
+  entry: './src/index.tsx',
   output: {
     path: __dirname + '/public',
-    filename: 'build/app.js'
+    filename: 'build/app.js',
+    publicPath: '/'
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js'],
+    alias: { "src": path.resolve(__dirname, "src") },
   },
   module: {
     rules: [
-      { test: /\.tsx?$/, loader: 'ts-loader' }
+      { test: /\.tsx?$/, loader: 'ts-loader' } ,
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] }
     ]
+  } ,
+  devServer: {
+    historyApiFallback: true,
   }
 }

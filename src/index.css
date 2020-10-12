@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+  font-family: Arial, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.OuterContainer {
+  background-color: #FFF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: black;
+}
+
+input[type='submit']:enabled {
+  cursor: pointer;
+}
