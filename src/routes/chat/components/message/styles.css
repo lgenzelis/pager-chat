@@ -1,6 +1,6 @@
 .TextMessageOuterContainer {
   display: flex;
-  margin-bottom: 24px;
+  margin: 24px 0;
 }
 
 .Avatar {
@@ -36,3 +36,9 @@
   /*line-height: 1.4;*/
 }
 
+
+.ImageMessage {
+  width: 192px;
+  height: 128px;
+  border-radius: 4px;
+}

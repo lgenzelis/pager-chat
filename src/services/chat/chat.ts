@@ -28,6 +28,7 @@ export function connect(
 }
 
 export function disconnect() {
+  socket?.emit('typing', false);
   socket?.removeAllListeners();
   socket?.disconnect();
   socket = undefined;
@@ -41,7 +42,7 @@ export function sendImageMessage(url: string, alt?: string) {
   socket?.emit('image-message', { url, alt });
 }
 
-export const isTyping = (function () {
+export const userIsTyping = (function () {
   const nonTypingTimeMsMax = 1500;
   let userIsTyping = false;
   let timeoutId: NodeJS.Timeout | undefined;

@@ -3,13 +3,17 @@
   max-width: 600px;
   height: 70vh;
   background-color: white;
-  padding: 24px;
+  padding: 0 24px;
   border: 1px solid #d6d6d6;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   color: black;
   filter: drop-shadow(0px 5px 15px rgba(0, 0, 0, 0.08));
+}
+
+.ChatInputForm {
+  margin: 0;
 }
 
 .ChatInputContainer {
@@ -39,7 +43,6 @@
 .ChatMsgSend {
   font-size: 16px;
   background: none;
-  /*background: green;*/
   border: 0;
   outline: 0;
   color: #c2c2c2;
@@ -52,4 +55,10 @@
 
 .ChatMsgSend:disabled {
   color: #c2c2c2;
+}
+
+.TypersDiv {
+  color: #727272;
+  margin: 8px 0 10px;
+  font-size: 12px;
 }

@@ -3,12 +3,12 @@ type MessageBase = {
   time: string;
 };
 
-export type TextMessage = MessageBase & {
+type TextMessage = MessageBase & {
   type: 'text';
   text: string;
 };
 
-export type ImageMessage = MessageBase & {
+type ImageMessage = MessageBase & {
   type: 'image';
   url: string;
   alt: string | null;
