@@ -17,7 +17,7 @@ type GiphyResponse = {
 export type GifResults = { id: string; title: string; url: string }[];
 
 export async function getGifResults(query: string): Promise<GifResults | null> {
-  const response = await fetch(`http://api.giphy.com/v1/gifs/search?q=${query || 'rickroll'}&api_key=${API_KEY}`);
+  const response = await fetch(`https://api.giphy.com/v1/gifs/search?q=${query || 'rickroll'}&api_key=${API_KEY}`);
   const responseParsed: GiphyResponse = await response.json();
 
   if (!responseParsed) {
