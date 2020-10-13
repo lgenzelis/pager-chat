@@ -35,10 +35,12 @@ function autoresizeTextArea(
 export const MessageInput: React.FC = () => {
   const [msg, setMsg] = useState('');
   const [textAreaRows, setTextAreaRows] = useState(1);
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const textareaInitialHeight = useRef<number>(0);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
+    textAreaRef.current?.focus();
     if (msg.toLowerCase().startsWith('/gif')) {
       const query = msg.substr(5).trim() || 'rick roll';
       const API_KEY = 'p6sA33BUc919642eiVspoiJu9PHTxcSd';
@@ -79,6 +81,7 @@ export const MessageInput: React.FC = () => {
           rows={textAreaRows}
           style={{ lineHeight: `${lineHeightPxs}px` }}
           ref={(ref) => {
+            textAreaRef.current = ref;
             if (!textareaInitialHeight.current) {
               textareaInitialHeight.current = ref?.scrollHeight ?? 0;
             }

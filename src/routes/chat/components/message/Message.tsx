@@ -11,7 +11,7 @@ type TextMessageProps = {
 
 export const Message: React.FC<TextMessageProps> = React.memo(({ message }) => {
   const date = parseISO(message.time);
-  let timeText = format(date, `h:mmaaaaa'm'`);
+  let timeText = format(date, `h:mm aaaaa'm'`);
   if (!isToday(date)) {
     if (isYesterday(date)) {
       timeText = `Yesterday @${timeText}`;
