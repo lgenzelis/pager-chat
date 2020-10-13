@@ -29,7 +29,16 @@ export const Message: React.FC<TextMessageProps> = ({ message }) => {
           <div className="DateTime">{timeText}</div>
         </div>
         {message.type === 'text' ? (
-          <div className="MsgBody">{message.text}</div>
+          <div className="MsgBody">
+            {message.text
+              .split('\n')
+              .filter(Boolean)
+              .map((line, idx) => (
+                <p key={idx} className="MessageTextLine">
+                  {line}
+                </p>
+              ))}
+          </div>
         ) : (
           <img src={message.url} alt={message.alt ?? ''} className="ImageMessage" />
         )}

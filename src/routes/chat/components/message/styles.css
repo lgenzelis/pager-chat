@@ -22,6 +22,7 @@
 }
 
 .Username {
+  font-size: 14px;
   font-weight: bold;
   margin-right: 12px;
 }
@@ -33,9 +34,16 @@
 }
 
 .MsgBody {
-  /*line-height: 1.4;*/
+  font-size: 14px;
 }
 
+.MessageTextLine {
+  margin-bottom: 4px;
+}
+
+.MessageTextLine:last-child {
+  margin-bottom: 0;
+}
 
 .ImageMessage {
   width: 192px;
