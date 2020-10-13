@@ -2,7 +2,8 @@
   "compilerOptions": {
     "outDir": "./out-tsc",
     "sourceMap": true,
-    "module": "commonjs",
+    "moduleResolution": "node",
+    "module": "esnext",
     "target": "es5",
     "jsx": "react",
     "strict": true,
