@@ -10,7 +10,7 @@ export const Chat: React.FC<RouteChildrenProps> = ({ location: { search }, histo
   const username = new URLSearchParams(search).get('username');
   const dummyBottomDiv = useRef<HTMLDivElement | null>(null);
 
-  const [messages, setMessages] = useState<MessageType[]>([]);
+  const [messages, setMessages] = useState<MessageType[]>();
   const [typers, setTypers] = useState<string[]>([]);
 
   useEffect(() => {
@@ -20,28 +20,40 @@ export const Chat: React.FC<RouteChildrenProps> = ({ location: { search }, histo
       connect(
         username,
         (newMsg: MessageType) => {
-          setMessages((currentMessages) => [...currentMessages, newMsg]);
-          dummyBottomDiv.current?.scrollIntoView({ behavior: 'smooth' });
+          setMessages((currentMessages) => [...(currentMessages ?? []), newMsg]);
         },
         setTypers,
+        setMessages,
       );
       return disconnect;
     }
   }, [history, username]);
 
+  useEffect(() => {
+    if (messages) {
+      dummyBottomDiv.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
   return (
     <div className="OuterContainer">
       <div className="ChatContainer">
-        <div className="ChatMessagesContainer">
-          {messages.map((msg, idx) => (
-            <Message message={msg} key={`${msg.username}-${msg.time}-${idx}`} />
-          ))}
-          <div ref={dummyBottomDiv} />
-        </div>
-        <MessageInput />
-        <div style={{ opacity: typers.length ? 1 : 0 }} className="TypersDiv">
-          {typers.length === 1 ? `${typers[0]} is typing...` : 'People are typing...'}
-        </div>
+        {messages ? (
+          <>
+            <div className="ChatMessagesContainer">
+              {messages.slice(messages.length - 100).map((msg, idx) => (
+                <Message message={msg} key={`${msg.username}-${msg.time}-${idx}`} />
+              ))}
+              <div ref={dummyBottomDiv} />
+            </div>
+            <MessageInput />
+            <div style={{ opacity: typers.length ? 1 : 0 }} className="TypersDiv">
+              {typers.length === 1 ? `${typers[0]} is typing...` : 'People are typing...'}
+            </div>
+          </>
+        ) : (
+          <div className="LoadingIndicator" />
+        )}
       </div>
     </div>
   );

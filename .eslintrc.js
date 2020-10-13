@@ -26,6 +26,8 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error', // checks rules of Hooks
     'react-hooks/exhaustive-deps': 'error', // checks effect dependencies
     'react/prop-types': 'off', // this rules conflicts with the use of React.FC<props>
+    'react/display-name': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'error',
     '@typescript-eslint/no-unused-vars': ['error', {"vars": "all", "args": "all", "argsIgnorePattern": "^_"}],
     '@typescript-eslint/restrict-plus-operands': 'error',
     '@typescript-eslint/await-thenable': 'error',

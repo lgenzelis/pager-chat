@@ -24,3 +24,23 @@
   margin: 8px 0 10px;
   font-size: 12px;
 }
+
+.LoadingIndicator {
+  border: 10px solid #f0f0f0;
+  border-top: 10px solid #727272;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -40px;
+  margin-top: -40px;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}

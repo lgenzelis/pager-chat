@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "webpack -p",
-    "start": "webpack-dev-server -d --content-base ./public",
+    "start": "webpack-dev-server -d --content-base ./public --host 0.0.0.0",
     "lint": "eslint 'src/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "dependencies": {

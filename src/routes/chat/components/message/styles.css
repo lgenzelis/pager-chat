@@ -38,11 +38,11 @@
 }
 
 .MessageTextLine {
-  margin-bottom: 4px;
+  margin: 0 0 4px;
 }
 
 .MessageTextLine:last-child {
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .ImageMessage {

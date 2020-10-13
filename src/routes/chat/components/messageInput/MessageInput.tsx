@@ -6,13 +6,12 @@ import './styles.css';
 const lineHeightPxs = 16;
 const maxRows = 3;
 
-function resizeTextArea(
+/* adapted from https://codepen.io/liborgabrhel/pen/eyzwOx */
+function autoresizeTextArea(
   event: React.ChangeEvent<HTMLTextAreaElement>,
   textareaInitialHeight: number,
   setTextAreaRows: (rows: number) => void,
 ) {
-  /* adapted from https://codepen.io/liborgabrhel/pen/eyzwOx */
-
   const previousRows = event.target.rows;
   event.target.rows = 1;
   const currentRows = ~~((event.target.scrollHeight - textareaInitialHeight) / lineHeightPxs) + 1;
@@ -75,7 +74,7 @@ export const MessageInput: React.FC = () => {
           onChange={(event) => {
             userIsTyping();
             setMsg(event.target.value);
-            resizeTextArea(event, textareaInitialHeight.current, setTextAreaRows);
+            autoresizeTextArea(event, textareaInitialHeight.current, setTextAreaRows);
           }}
           rows={textAreaRows}
           style={{ lineHeight: `${lineHeightPxs}px` }}

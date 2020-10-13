@@ -9,7 +9,7 @@ type TextMessageProps = {
   message: MessageType;
 };
 
-export const Message: React.FC<TextMessageProps> = ({ message }) => {
+export const Message: React.FC<TextMessageProps> = React.memo(({ message }) => {
   const date = parseISO(message.time);
   let timeText = format(date, `h:mmaaaaa'm'`);
   if (!isToday(date)) {
@@ -45,4 +45,4 @@ export const Message: React.FC<TextMessageProps> = ({ message }) => {
       </div>
     </div>
   );
-};
+});

@@ -4,17 +4,37 @@ import { Message, Typers } from './types';
 
 let socket: SocketIOClient.Socket | undefined;
 
-export function connect(
+export async function connect(
   username: string,
   onMessageEvent: (message: Message) => void,
   onTypingEvent: (usersTyping: string[]) => void,
+  onLoadInitialMsgsBatch: (messages: Message[]) => void,
 ) {
   socket?.disconnect();
   socket = socketIOClient(`https://pager-hiring.herokuapp.com/?username=${username}`);
-  // socket.on('user-connected', (username: string) => {
-  //   console.log(username, 'CONNECTED');
-  // socket.on('user-disconnected', (username: string) => {
-  //   console.log(username, 'DISCONNECTED');
+
+  const initialMessages: Message[] = [];
+  const maxWaitPromise = new Promise((resolve) =>
+    setTimeout(() => {
+      resolve();
+    }, 3500),
+  );
+  const maxWaitBetweenMsgsPromise = new Promise((resolve) => {
+    let maxWaitBetweenMsgsTimeoutId: NodeJS.Timeout;
+    socket?.on('message', (msg: Message) => {
+      initialMessages.push(msg);
+      if (maxWaitBetweenMsgsTimeoutId) {
+        clearTimeout(maxWaitBetweenMsgsTimeoutId);
+      }
+      maxWaitBetweenMsgsTimeoutId = setTimeout(() => {
+        resolve();
+      }, 200);
+    });
+  });
+
+  await Promise.race([maxWaitPromise, maxWaitBetweenMsgsPromise]);
+  onLoadInitialMsgsBatch(initialMessages);
+  socket.removeAllListeners();
 
   socket.on('message', onMessageEvent);
 
@@ -25,6 +45,16 @@ export function connect(
         .map(([otherUser]) => otherUser),
     );
   });
+
+  // socket.on('user-connected', (_username: string) => {
+  //   if (_username === username) {
+  //
+  //   }
+  //
+  // });
+  //   console.log(username, 'CONNECTED');
+  // socket.on('user-disconnected', (username: string) => {
+  //   console.log(username, 'DISCONNECTED');
 }
 
 export function disconnect() {
