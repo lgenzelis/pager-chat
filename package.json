@@ -7,7 +7,7 @@
   "scripts": {
     "build": "webpack -p",
     "start": "webpack-dev-server -d --content-base ./public --host 0.0.0.0",
-    "lint": "eslint 'src/**/*.{js,ts,tsx}' --quiet --fix"
+    "lint": "eslint 'src/**/*.{js,ts,tsx}' --quiet --fix && tsc --noEmit"
   },
   "dependencies": {
     "date-fns": "^2.16.1",

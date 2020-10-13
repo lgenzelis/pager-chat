@@ -17,6 +17,6 @@ body {
   color: black;
 }
 
-input[type='submit']:enabled {
+button:enabled {
   cursor: pointer;
 }

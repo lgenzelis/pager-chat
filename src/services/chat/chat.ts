@@ -1,42 +1,56 @@
 import socketIOClient from 'socket.io-client';
 
-import { Message, Typers } from './types';
+import { ChatEvent, Message, Typers } from './types';
 
 let socket: SocketIOClient.Socket | undefined;
 
 export async function connect(
   username: string,
-  onMessageEvent: (message: Message) => void,
+  onChatEvent: (message: ChatEvent) => void,
   onTypingEvent: (usersTyping: string[]) => void,
-  onLoadInitialMsgsBatch: (messages: Message[]) => void,
+  onLoadInitialChatEventsBatch: (messages: ChatEvent[]) => void,
 ) {
   socket?.disconnect();
   socket = socketIOClient(`https://pager-hiring.herokuapp.com/?username=${username}`);
 
-  const initialMessages: Message[] = [];
+  const initialChatEvents: ChatEvent[] = [];
   const maxWaitPromise = new Promise((resolve) =>
     setTimeout(() => {
       resolve();
-    }, 3500),
+    }, 5000),
   );
   const maxWaitBetweenMsgsPromise = new Promise((resolve) => {
     let maxWaitBetweenMsgsTimeoutId: NodeJS.Timeout;
     socket?.on('message', (msg: Message) => {
-      initialMessages.push(msg);
+      initialChatEvents.push(msg);
       if (maxWaitBetweenMsgsTimeoutId) {
         clearTimeout(maxWaitBetweenMsgsTimeoutId);
       }
       maxWaitBetweenMsgsTimeoutId = setTimeout(() => {
         resolve();
-      }, 200);
+      }, 400);
+    });
+    socket?.on('user-connected', (_username: string) => {
+      initialChatEvents.push({ type: 'connected', username: _username, time: new Date().toISOString() });
+    });
+    socket?.on('user-disconnected', (_username: string) => {
+      initialChatEvents.push({ type: 'disconnected', username: _username, time: new Date().toISOString() });
     });
   });
 
   await Promise.race([maxWaitPromise, maxWaitBetweenMsgsPromise]);
-  onLoadInitialMsgsBatch(initialMessages);
+  onLoadInitialChatEventsBatch(initialChatEvents);
   socket.removeAllListeners();
 
-  socket.on('message', onMessageEvent);
+  socket.on('message', onChatEvent);
+
+  socket.on('user-connected', (_username: string) => {
+    onChatEvent({ type: 'connected', username: _username, time: new Date().toISOString() });
+  });
+
+  socket.on('user-disconnected', (_username: string) => {
+    onChatEvent({ type: 'disconnected', username: _username, time: new Date().toISOString() });
+  });
 
   socket.on('is-typing', (typers: Typers) => {
     onTypingEvent(
@@ -45,16 +59,6 @@ export async function connect(
         .map(([otherUser]) => otherUser),
     );
   });
-
-  // socket.on('user-connected', (_username: string) => {
-  //   if (_username === username) {
-  //
-  //   }
-  //
-  // });
-  //   console.log(username, 'CONNECTED');
-  // socket.on('user-disconnected', (username: string) => {
-  //   console.log(username, 'DISCONNECTED');
 }
 
 export function disconnect() {

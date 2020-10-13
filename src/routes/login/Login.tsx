@@ -25,7 +25,9 @@ export function Login() {
             </div>
           </label>
           <div className="LoginNextContainer">
-            <input type="submit" value="Next" className="LoginNextButton" disabled={!username} />
+            <button type="submit" className="LoginNextButton" disabled={!username}>
+              Next
+            </button>
           </div>
         </form>
       </div>

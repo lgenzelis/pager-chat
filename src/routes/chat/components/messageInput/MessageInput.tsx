@@ -1,12 +1,14 @@
 import React, { useRef, useState } from 'react';
 import { sendImageMessage, sendTextMessage, userIsTyping } from 'src/services/chat';
+import { getGifResults, GifResults } from 'src/services/gif';
 
 import './styles.css';
+import { GifPreviewer } from './GifPreviewer';
 
 const lineHeightPxs = 16;
 const maxRows = 3;
 
-/* adapted from https://codepen.io/liborgabrhel/pen/eyzwOx */
+/* autoresizeTextArea adapted from https://codepen.io/liborgabrhel/pen/eyzwOx */
 function autoresizeTextArea(
   event: React.ChangeEvent<HTMLTextAreaElement>,
   textareaInitialHeight: number,
@@ -32,62 +34,93 @@ function autoresizeTextArea(
   }
 }
 
+export type GifsPreviewData = {
+  gifs: GifResults;
+  activeIdx: number;
+};
+
 export const MessageInput: React.FC = () => {
   const [msg, setMsg] = useState('');
   const [textAreaRows, setTextAreaRows] = useState(1);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const textareaInitialHeight = useRef<number>(0);
+  const [gifPreviewData, setGifPreviewData] = useState<GifsPreviewData>();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
-    textAreaRef.current?.focus();
-    if (msg.toLowerCase().startsWith('/gif')) {
-      const query = msg.substr(5).trim() || 'rick roll';
-      const API_KEY = 'p6sA33BUc919642eiVspoiJu9PHTxcSd';
-      console.log('~~~ query', query);
-      fetch(`http://api.giphy.com/v1/gifs/search?q=${query}&api_key=${API_KEY}`)
-        .then((res) => res.json())
-        .then(({ data }) => {
-          console.log('~~~ data', data);
-          console.log('~~~ data[0].title', data[0].title); //TODO
-          console.log('~~~ data[0].title', data[0].images.downsized.url);
-          sendImageMessage(data[0].images.downsized.url, data[0].title);
-        });
+    if (gifPreviewData) {
+      const gif = gifPreviewData.gifs[gifPreviewData.activeIdx];
+      sendImageMessage(gif.url, gif.title);
+      setGifPreviewData(undefined);
+    } else if (msg.toLowerCase().startsWith('/gif')) {
+      getGifResults(msg.substr(5).trim()).then((results) => {
+        if (results) {
+          setGifPreviewData({ gifs: results, activeIdx: 0 });
+        }
+      });
     } else {
       sendTextMessage(msg);
     }
     setMsg('');
     setTextAreaRows(1);
+    textAreaRef.current?.focus();
   };
 
   return (
-    <form className="ChatInputForm" onSubmit={onSubmit}>
+    <form
+      className="ChatInputForm"
+      onSubmit={onSubmit}
+      onReset={() => {
+        setGifPreviewData(undefined);
+        setMsg('');
+        setTextAreaRows(1);
+      }}
+    >
       <div className="ChatInputContainer">
-        <textarea
-          className="ChatMsgInput"
-          autoFocus
-          placeholder="Message"
-          value={msg}
-          onKeyPress={(event) => {
-            if (event.key === 'Enter' && !event.shiftKey) {
-              onSubmit(event);
+        {!gifPreviewData ? (
+          <>
+            <textarea
+              className="ChatMsgInput"
+              autoFocus
+              placeholder="ChatEvent"
+              value={msg}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                  onSubmit(event);
+                }
+              }}
+              onChange={(event) => {
+                userIsTyping();
+                setMsg(event.target.value);
+                autoresizeTextArea(event, textareaInitialHeight.current, setTextAreaRows);
+              }}
+              rows={textAreaRows}
+              style={{ lineHeight: `${lineHeightPxs}px` }}
+              ref={(ref) => {
+                textAreaRef.current = ref;
+                if (!textareaInitialHeight.current) {
+                  textareaInitialHeight.current = ref?.scrollHeight ?? 0;
+                }
+              }}
+            />
+            <button type="submit" className="ChatMsgSend" disabled={!msg}>
+              {msg.toLowerCase().startsWith('/gif') ? 'Search' : 'Send'}
+            </button>
+          </>
+        ) : (
+          <GifPreviewer
+            gifPreviewData={gifPreviewData}
+            setActivePreview={(activeIdx) =>
+              setGifPreviewData(
+                (prevPreviewData) =>
+                  prevPreviewData && {
+                    activeIdx,
+                    gifs: prevPreviewData.gifs,
+                  },
+              )
             }
-          }}
-          onChange={(event) => {
-            userIsTyping();
-            setMsg(event.target.value);
-            autoresizeTextArea(event, textareaInitialHeight.current, setTextAreaRows);
-          }}
-          rows={textAreaRows}
-          style={{ lineHeight: `${lineHeightPxs}px` }}
-          ref={(ref) => {
-            textAreaRef.current = ref;
-            if (!textareaInitialHeight.current) {
-              textareaInitialHeight.current = ref?.scrollHeight ?? 0;
-            }
-          }}
-        />
-        <input type="submit" className="ChatMsgSend" value="Send" disabled={!msg} />
+          />
+        )}
       </div>
     </form>
   );

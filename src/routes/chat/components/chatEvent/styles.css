@@ -18,13 +18,13 @@
 .UserTimeContainer {
   display: flex;
   margin-bottom: 4px;
-  align-items: center;
+  align-items: baseline;
 }
 
 .Username {
   font-size: 14px;
   font-weight: bold;
-  margin-right: 12px;
+  margin-right: 8px;
 }
 
 .DateTime {
@@ -47,6 +47,15 @@
 
 .ImageMessage {
   width: 192px;
+  max-width: 100%;
   height: 128px;
   border-radius: 4px;
+}
+
+.ConnectionEvent {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  font-size: 14px;
+  color: #727272;
 }

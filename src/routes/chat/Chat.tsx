@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
-import { Message as MessageType, connect, disconnect } from 'src/services/chat';
+import { connect, disconnect, ChatEvent as ChatEventType } from 'src/services/chat';
 
 import './styles.css';
-import { Message } from './components/message';
+import { ChatEvent } from './components/chatEvent';
 import { MessageInput } from './components/messageInput';
 
 export const Chat: React.FC<RouteChildrenProps> = ({ location: { search }, history }) => {
   const username = new URLSearchParams(search).get('username');
   const dummyBottomDiv = useRef<HTMLDivElement | null>(null);
 
-  const [messages, setMessages] = useState<MessageType[]>();
+  const [chatEvents, setChatEvents] = useState<ChatEventType[]>();
   const [typers, setTypers] = useState<string[]>([]);
 
   useEffect(() => {
@@ -19,30 +19,30 @@ export const Chat: React.FC<RouteChildrenProps> = ({ location: { search }, histo
     } else {
       connect(
         username,
-        (newMsg: MessageType) => {
-          setMessages((currentMessages) => [...(currentMessages ?? []), newMsg]);
+        (newMsg: ChatEventType) => {
+          setChatEvents((prevChatEvents) => [...(prevChatEvents ?? []), newMsg]);
         },
         setTypers,
-        setMessages,
+        setChatEvents,
       );
       return disconnect;
     }
   }, [history, username]);
 
   useEffect(() => {
-    if (messages) {
+    if (chatEvents) {
       dummyBottomDiv.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]);
+  }, [chatEvents]);
 
   return (
     <div className="OuterContainer">
       <div className="ChatContainer">
-        {messages ? (
+        {chatEvents ? (
           <>
             <div className="ChatMessagesContainer">
-              {messages.slice(messages.length - 100).map((msg, idx) => (
-                <Message message={msg} key={`${msg.username}-${msg.time}-${idx}`} />
+              {chatEvents.slice(chatEvents.length - 100).map((chatEvent, idx) => (
+                <ChatEvent chatEvent={chatEvent} key={`${chatEvent.username}-${chatEvent.time}-${idx}`} />
               ))}
               <div ref={dummyBottomDiv} />
             </div>

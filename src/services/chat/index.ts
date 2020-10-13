@@ -1,2 +1,2 @@
 export { connect, disconnect, userIsTyping, sendImageMessage, sendTextMessage } from './chat';
-export { Message } from './types';
+export { ChatEvent, Message } from './types';

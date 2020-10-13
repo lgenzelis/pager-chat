@@ -1,5 +1,6 @@
 .ChatInputForm {
   margin: 0;
+  padding-right: 24px;
 }
 
 .ChatInputContainer {
@@ -17,9 +18,8 @@
   border: 0;
   resize: none;
   font-family: Arial, serif;
-  -ms-overflow-style: none;  /* Hide scrollbar (IE and Edge) */
-  scrollbar-width: none;  /* Hide scrollbar (Firefox) */
-
+  -ms-overflow-style: none; /* Hide scrollbar (IE and Edge) */
+  scrollbar-width: none; /* Hide scrollbar (Firefox) */
 }
 
 .ChatMsgInput::-webkit-scrollbar {
@@ -39,7 +39,8 @@
   margin-right: 16px;
 }
 
-.ChatMsgSend:hover, .ChatMsgSend:focus {
+.ChatMsgSend:hover,
+.ChatMsgSend:focus {
   color: #ff8200;
 }
 
@@ -47,4 +48,27 @@
   color: #c2c2c2;
 }
 
+.GifPreview {
+  width: 128px;
+  height: 96px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
 
+.GifPreviewButtonsContainer {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.GifPreviewButtonsContainer button {
+  margin: 4px;
+}
+
+@media screen and (max-width: 420px) {
+  .GifPreviewButtonsContainer {
+    flex-direction: column;
+  }
+}
