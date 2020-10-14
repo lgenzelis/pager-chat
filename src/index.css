@@ -5,6 +5,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button:enabled {
+  cursor: pointer;
+}
+
+img {
+  object-fit: cover;
+  background: #f0f0f0;
+}
+
 .OuterContainer {
   background-color: white;
   position: fixed;
@@ -17,6 +26,16 @@ body {
   color: black;
 }
 
-button:enabled {
-  cursor: pointer;
+.InnerContainer {
+  width: 600px;
+  max-width: calc(100vw - 10px);
+  max-height: calc(100% - 10px);
+  box-sizing: border-box;
+  background-color: white;
+  color: black;
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(0px 5px 15px rgba(0, 0, 0, 0.08));
 }

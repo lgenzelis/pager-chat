@@ -1,17 +1,6 @@
 .ChatContainer {
-  width: 600px;
-  max-width: calc(100vw - 10px);
   height: 800px;
-  max-height: calc(100% - 10px);
-  background-color: white;
   padding-left: 24px;
-  border: 1px solid #d6d6d6;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  color: black;
-  filter: drop-shadow(0px 5px 15px rgba(0, 0, 0, 0.08));
-  box-sizing: border-box;
 }
 
 .ChatMessagesContainer {
@@ -44,9 +33,4 @@
   100% {
     transform: rotate(360deg);
   }
-}
-
-img {
-  object-fit: cover;
-  background: #f0f0f0;
 }

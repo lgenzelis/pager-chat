@@ -43,8 +43,8 @@
   }
 }
 
-.ChatMsgSend {
-  font-size: 16px;
+.ChatMsgButton {
+  font-size: 14px;
   background: none;
   border: 0;
   outline: 0;
@@ -52,12 +52,12 @@
   margin-right: 16px;
 }
 
-.ChatMsgSend:hover,
-.ChatMsgSend:focus {
+.ChatMsgButton:hover,
+.ChatMsgButton:focus {
   color: #ff8200;
 }
 
-.ChatMsgSend:disabled {
+.ChatMsgButton:disabled {
   color: #c2c2c2;
 }
 

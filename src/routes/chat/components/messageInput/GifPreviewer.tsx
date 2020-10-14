@@ -24,13 +24,13 @@ export const GifPreviewer: React.FC<GifPreviewerProps> = ({ gifPreviewData, setA
         onLoad={() => setActivePreview(temporaryActivePreviewIdx)}
       />
       <div className="GifPreviewButtonsContainer">
-        <button type="submit" className="ChatMsgSend" autoFocus>
+        <button type="submit" className="ChatMsgButton" autoFocus>
           Send
         </button>
-        <button type="button" className="ChatMsgSend" onClick={onShuffle}>
+        <button type="button" className="ChatMsgButton" onClick={onShuffle}>
           Shuffle
         </button>
-        <button type="reset" className="ChatMsgSend">
+        <button type="reset" className="ChatMsgButton">
           Cancel
         </button>
       </div>

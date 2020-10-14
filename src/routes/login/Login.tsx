@@ -7,7 +7,7 @@ export function Login() {
 
   return (
     <div className="OuterContainer">
-      <div className="LoginContainer">
+      <div className="InnerContainer LoginContainer">
         <div className="LoginTitle">Join chat</div>
 
         <form action="/chat">

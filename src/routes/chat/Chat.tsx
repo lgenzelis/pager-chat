@@ -37,7 +37,7 @@ export const Chat: React.FC<RouteChildrenProps> = ({ location: { search }, histo
 
   return (
     <div className="OuterContainer">
-      <div className="ChatContainer">
+      <div className="InnerContainer ChatContainer">
         {chatEvents ? (
           <>
             <div className="ChatMessagesContainer">

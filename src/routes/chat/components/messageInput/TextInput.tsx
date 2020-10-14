@@ -86,7 +86,7 @@ export const TextInput: React.FC<TextInputProps> = ({
         disabled={loading}
       />
       {!loading && (
-        <button type="submit" className="ChatMsgSend" disabled={!msg}>
+        <button type="submit" className="ChatMsgButton" disabled={!msg}>
           {msg.toLowerCase().startsWith('/gif') ? 'Search' : 'Send'}
         </button>
       )}
