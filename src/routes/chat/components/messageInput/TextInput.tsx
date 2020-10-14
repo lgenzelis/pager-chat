@@ -38,9 +38,17 @@ type TextInputProps = {
   textAreaRows: number;
   setTextAreaRows: (nRows: number) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLTextAreaElement>) => void;
+  loading: boolean;
 };
 
-export const TextInput: React.FC<TextInputProps> = ({ msg, setMsg, textAreaRows, setTextAreaRows, onSubmit }) => {
+export const TextInput: React.FC<TextInputProps> = ({
+  msg,
+  setMsg,
+  textAreaRows,
+  setTextAreaRows,
+  onSubmit,
+  loading,
+}) => {
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const textareaInitialHeight = useRef<number>(0);
 
@@ -67,18 +75,21 @@ export const TextInput: React.FC<TextInputProps> = ({ msg, setMsg, textAreaRows,
     <>
       <textarea
         autoFocus
-        placeholder="ChatEvent"
-        value={msg}
+        placeholder="Message"
+        value={loading ? 'Loading...' : msg}
         onKeyPress={textAreaOnKeyPress}
         onChange={textAreaOnChange}
         ref={textAreaOnRef}
         className="ChatMsgInput"
         style={{ lineHeight: `${lineHeightPxs}px` }}
         rows={textAreaRows}
+        disabled={loading}
       />
-      <button type="submit" className="ChatMsgSend" disabled={!msg}>
-        {msg.toLowerCase().startsWith('/gif') ? 'Search' : 'Send'}
-      </button>
+      {!loading && (
+        <button type="submit" className="ChatMsgSend" disabled={!msg}>
+          {msg.toLowerCase().startsWith('/gif') ? 'Search' : 'Send'}
+        </button>
+      )}
     </>
   );
 };

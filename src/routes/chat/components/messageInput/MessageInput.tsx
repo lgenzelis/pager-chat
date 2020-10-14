@@ -16,6 +16,7 @@ export const MessageInput: React.FC = () => {
   const [textAreaRows, setTextAreaRows] = useState(1);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [gifPreviewData, setGifPreviewData] = useState<GifsPreviewData>();
+  const [isFetchingGifs, setIsFetchingGifs] = useState(false);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
@@ -24,11 +25,14 @@ export const MessageInput: React.FC = () => {
       sendImageMessage(gif.url, gif.title);
       setGifPreviewData(undefined);
     } else if (msg.toLowerCase().startsWith('/gif')) {
-      getGifResults(msg.substr(5).trim()).then((results) => {
-        if (results) {
-          setGifPreviewData({ gifs: results, activeIdx: 0 });
-        }
-      });
+      setIsFetchingGifs(true);
+      getGifResults(msg.substr(5).trim())
+        .then((results) => {
+          if (results) {
+            setGifPreviewData({ gifs: results, activeIdx: 0 });
+          }
+        })
+        .finally(() => setIsFetchingGifs(false));
     } else {
       sendTextMessage(msg);
     }
@@ -56,7 +60,7 @@ export const MessageInput: React.FC = () => {
     <form className="ChatInputForm" onSubmit={onSubmit} onReset={onReset}>
       <div className="ChatInputContainer">
         {!gifPreviewData ? (
-          <TextInput {...{ msg, setMsg, textAreaRows, setTextAreaRows, onSubmit }} />
+          <TextInput {...{ msg, setMsg, textAreaRows, setTextAreaRows, onSubmit, loading: isFetchingGifs }} />
         ) : (
           <GifPreviewer gifPreviewData={gifPreviewData} setActivePreview={setActiveGifPreview} />
         )}

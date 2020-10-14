@@ -16,13 +16,23 @@ type GiphyResponse = {
 
 export type GifResults = { id: string; title: string; url: string }[];
 
-export async function getGifResults(query: string): Promise<GifResults | null> {
-  const response = await fetch(`https://api.giphy.com/v1/gifs/search?q=${query || 'rickroll'}&api_key=${API_KEY}`);
-  const responseParsed: GiphyResponse = await response.json();
+const timeoutLimitMs = 10000;
 
-  if (!responseParsed) {
+export async function getGifResults(query: string): Promise<GifResults | null> {
+  try {
+    const timeoutPromise = new Promise<undefined>((resolve) => setTimeout(resolve, timeoutLimitMs));
+    const fetchPromise = fetch(`https://api.giphy.com/v1/gifs/search?q=${query || 'rickroll'}&api_key=${API_KEY}`);
+
+    const response = await Promise.race([timeoutPromise, fetchPromise]);
+
+    const responseParsed: GiphyResponse | undefined = await response?.json();
+
+    if (!responseParsed || !responseParsed.data.length) {
+      return null;
+    } else {
+      return responseParsed.data.map(({ id, title, images: { downsized: { url } } }) => ({ id, title, url }));
+    }
+  } catch (error) {
     return null;
-  } else {
-    return responseParsed.data.map(({ id, title, images: { downsized: { url } } }) => ({ id, title, url }));
   }
 }

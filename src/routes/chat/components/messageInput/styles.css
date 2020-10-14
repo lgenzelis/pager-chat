@@ -30,6 +30,19 @@
   color: #c2c2c2;
 }
 
+.ChatMsgInput:disabled {
+  animation: loading 1.5s linear infinite;
+}
+
+@keyframes loading {
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
 .ChatMsgSend {
   font-size: 16px;
   background: none;
