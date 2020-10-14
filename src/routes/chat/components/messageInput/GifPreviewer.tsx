@@ -8,9 +8,11 @@ type GifPreviewerProps = {
 };
 
 export const GifPreviewer: React.FC<GifPreviewerProps> = ({ gifPreviewData, setActivePreview }) => {
+  // we need the temporaryActivePreviewIdx state so that when the user presses "send", we send the currently visible GIF, not the one we may be still loading
   const [temporaryActivePreviewIdx, setTemporaryActivePreviewIdx] = useState<number>(gifPreviewData.activeIdx);
 
   const onShuffle = () => {
+    // Giphy returns 50 results by default, so we just circle over them
     setTemporaryActivePreviewIdx((gifPreviewData.activeIdx + 1) % gifPreviewData.gifs.length);
   };
 
