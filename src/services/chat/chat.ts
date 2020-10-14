@@ -17,7 +17,7 @@ export async function connect(
   const maxWaitPromise = new Promise((resolve) =>
     setTimeout(() => {
       resolve();
-    }, 5000),
+    }, 6500),
   );
   const maxWaitBetweenMsgsPromise = new Promise((resolve) => {
     let maxWaitBetweenMsgsTimeoutId: NodeJS.Timeout;
@@ -28,7 +28,7 @@ export async function connect(
       }
       maxWaitBetweenMsgsTimeoutId = setTimeout(() => {
         resolve();
-      }, 400);
+      }, 900);
     });
     socket?.on('user-connected', (_username: string) => {
       initialChatEvents.push({ type: 'connected', username: _username, time: new Date().toISOString() });
