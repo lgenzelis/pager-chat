@@ -6,8 +6,9 @@
   "private": true,
   "scripts": {
     "build": "rm -f public/build/* && webpack -p",
-    "start": "webpack-dev-server -d --content-base ./public --host 0.0.0.0",
-    "lint": "eslint 'src/**/*.{js,ts,tsx}' --quiet --fix && tsc --noEmit"
+    "deploy": "firebase deploy --only hosting:lucas-chat-pager",
+    "lint": "eslint 'src/**/*.{js,ts,tsx}' --quiet --fix && tsc --noEmit",
+    "start": "webpack-dev-server -d --content-base ./public --host 0.0.0.0"
   },
   "dependencies": {
     "date-fns": "^2.16.1",
